@@ -1364,7 +1364,7 @@ function submitOrder() {
   var plain = html.replace(/<[^>]+>/g, "").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
 
   var TG_URL = "https://api.telegram.org/bot9074721358:AAF2zL-jQWUlM1Vho_OE87Aai1w0mCyaNcI/sendMessage";
-  var TG_CHAT = "-5303900148";
+  var TG_CHAT = "-1004422677429";
   function tgSend(body) {
     return fetch(TG_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
       .then(function(r) { return r.json(); });
