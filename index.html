@@ -353,6 +353,11 @@
     font-size: 11px; padding: 2px 8px; border-radius: 12px; pointer-events: none; }
   @media (max-width: 640px) { .img-modal-nav { width: 38px; height: 38px; font-size: 28px; line-height: 34px; }
     .img-modal-nav.prev { left: 8px; } .img-modal-nav.next { right: 8px; } }
+  /* ===== FIX: cart panel scrolls as a whole so the order form is always reachable ===== */
+  .cart-panel { height: 100vh; height: 100dvh; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+  .cart-header { position: sticky; top: 0; z-index: 2; flex-shrink: 0; }
+  .cart-items { flex: 1 0 auto; overflow: visible; }
+  .cart-footer { flex-shrink: 0; padding-bottom: calc(18px + env(safe-area-inset-bottom)); }
 </style>
 </head>
 <body>
@@ -786,10 +791,10 @@ const products = [
   { id:207, name:"Двойная керамическая миска на деревянной подставке, 2×400 мл", art:"5741", group:"dblbowl", opt:"2×400 мл", baseName:"Двойная керамическая миска на деревянной подставке", size:"", price:120, emoji:"🥣", cat:["dog","cat","accessories"], badge:"" },
   { id:217, name:"Двойная керамическая миска на деревянной подставке, 2×900 мл", art:"11137", group:"dblbowl", opt:"2×900 мл", baseName:"Двойная керамическая миска на деревянной подставке", size:"", price:150, emoji:"🥣", cat:["dog","cat","accessories"], badge:"" },
   { id:215, name:"Морж Уолтер", art:"37151", size:"23 см", price:25, emoji:"🦭", cat:["dog","toys"], badge:"" },
-  { id:196, name:"Чайка Сельма", art:"37152", size:"30 см", price:30, emoji:"🐦", cat:["dog","toys"], badge:"" },
-  { id:210, name:"Игрушка для собак Мячик-зверёк «Свинка»", art:"14743p", group:"14743", opt:"Свинка", baseName:"Игрушка для собак Мячик-зверёк", size:"", price:12, emoji:"🐷", cat:["dog","toys"], badge:"" },
-  { id:211, name:"Игрушка для собак Мячик-зверёк «Курочка»", art:"14743h", group:"14743", opt:"Курочка", baseName:"Игрушка для собак Мячик-зверёк", size:"", price:12, emoji:"🐔", cat:["dog","toys"], badge:"" },
-  { id:212, name:"Игрушка для собак Мячик-зверёк «Коровка»", art:"14743c", group:"14743", opt:"Коровка", baseName:"Игрушка для собак Мячик-зверёк", size:"", price:12, emoji:"🐮", cat:["dog","toys"], badge:"" },
+  { id:196, name:"Чайка Сельма", art:"37152", size:"30 см", price:31, emoji:"🐦", cat:["dog","toys"], badge:"" },
+  { id:210, name:"Игрушка для собак Мячик-зверёк «Свинка»", art:"14743p", group:"14743", opt:"Свинка", baseName:"Игрушка для собак Мячик-зверёк", size:"", price:13, emoji:"🐷", cat:["dog","toys"], badge:"" },
+  { id:211, name:"Игрушка для собак Мячик-зверёк «Курочка»", art:"14743h", group:"14743", opt:"Курочка", baseName:"Игрушка для собак Мячик-зверёк", size:"", price:13, emoji:"🐔", cat:["dog","toys"], badge:"" },
+  { id:212, name:"Игрушка для собак Мячик-зверёк «Коровка»", art:"14743c", group:"14743", opt:"Коровка", baseName:"Игрушка для собак Мячик-зверёк", size:"", price:13, emoji:"🐮", cat:["dog","toys"], badge:"" },
   { id:197, name:"Канатная игрушка «Птица Петра»", art:"37163", size:"28 см", price:30, emoji:"🐦", cat:["dog","toys"], badge:"" },
   { id:198, name:"Страус", art:"3255", size:"31 см", price:25, emoji:"🐦", cat:["dog","toys"], badge:"" },
   { id:199, name:"Новогодняя игрушка «Палочка»", art:"90085", size:"", price:20, emoji:"🎄", cat:["dog","toys"], badge:"Новогодняя коллекция" },
@@ -803,7 +808,7 @@ const products = [
   { id:61, name:"«Петушок»", art:"3503", size:"23 x 14 x 29 см", price:38, emoji:"🐓", cat:["dog","toys"], badge:"" },
   { id:68, name:"«Фазан»", art:"4005", size:"25 x 25 x 5 см", price:20, emoji:"🐦", cat:["dog","toys"], badge:"" },
   { id:69, name:"«Бурундук»", art:"4023", size:"15 x 11 x 7 см", price:25, emoji:"🐿️", cat:["dog","toys"], badge:"" },
-  { id:14, name:"Белочка Фелисия",              art:"4417",  size:"42x16x9 см",        price:30,  emoji:"🐿️", cat:["dog","toys"],              badge:"" },
+  { id:14, name:"Белочка Фелисия",              art:"4417",  size:"42x16x9 см",        price:32,  emoji:"🐿️", cat:["dog","toys"],              badge:"" },
   { id:15, name:"Опоссум Роб",                  art:"4415",  size:"39x19x11 см",       price:35,  emoji:"🐾", cat:["dog","toys"],               badge:"" },
   { id:9,  name:"Игрушка для собак с мячом",     art:"3035",  size:"15x15x10 см",       price:35,  emoji:"🐑", cat:["dog","toys"],               badge:"" },
   { id:10, name:"Игрушка для собак с веревками",   art:"3040",  size:"17x17x10 см",       price:30,  emoji:"🐕", cat:["dog","toys"],               badge:"" },
@@ -846,9 +851,9 @@ const products = [
   { id:25, name:"Складная миска 680 мл",         art:"11003", size:"680 мл",            price:20,  emoji:"🥣", cat:["dog","cat","accessories"],  badge:"" },
   { id:26, name:"Поилка с фильтром",             art:"11205", size:"400 мл",            price:30,  emoji:"🚰", cat:["dog","cat","accessories"],  badge:"Распродано. Ожидается поставка." },
   { id:92, name:"Диспенсер для пакетов для уборки за собакой", art:"11589", size:"8.2 см", price:17, emoji:"🎒", cat:["dog","accessories"], badge:"" },
-  { id:213, name:"Пакеты для уборки за собакой с ароматом лаванды, фиолетовые", art:"11616", group:"poopbags", opt:"Лаванда", baseName:"Пакеты для уборки за собакой, 8 рулонов × 15 шт.", size:"фиолетовые", price:15, emoji:"💜", cat:["dog","accessories"], badge:"" },
-  { id:214, name:"Пакеты для уборки за собакой с ароматом детской пудры, синие", art:"11606", group:"poopbags", opt:"Детская пудра", baseName:"Пакеты для уборки за собакой, 8 рулонов × 15 шт.", size:"синие", price:15, emoji:"💙", cat:["dog","accessories"], badge:"" },
-  { id:208, name:"Увлажняющий бальзам для лап AFP, 60 г", art:"7707", size:"", price:11, emoji:"🐾", cat:["dog","cat","care"], badge:"" },
+  { id:213, name:"Пакеты для уборки за собакой с ароматом лаванды, фиолетовые", art:"11616", group:"poopbags", opt:"Лаванда", baseName:"Пакеты для уборки за собакой, 8 рулонов × 15 шт.", size:"фиолетовые", price:16, emoji:"💜", cat:["dog","accessories"], badge:"" },
+  { id:214, name:"Пакеты для уборки за собакой с ароматом детской пудры, синие", art:"11606", group:"poopbags", opt:"Детская пудра", baseName:"Пакеты для уборки за собакой, 8 рулонов × 15 шт.", size:"синие", price:16, emoji:"💙", cat:["dog","accessories"], badge:"" },
+  { id:208, name:"Увлажняющий бальзам для лап AFP, 60 г", art:"7707", size:"", price:15, emoji:"🐾", cat:["dog","cat","care"], badge:"" },
   { id:219, name:"Защитный стик для лап AFP, 15 г", art:"7706", size:"", price:13, emoji:"🐾", cat:["dog","cat","care"], badge:"" },
   { id:220, name:"Салфетки для груминга AFP с ароматом опавших листьев", art:"7721", size:"50 шт.", price:10, emoji:"🧻", cat:["dog","cat","care"], badge:"" },
   { id:89, name:"Щётка для ухода за шерстью собак и кошек", art:"11459", size:"13x7.5x4.5 см", price:11, emoji:"🪮", cat:["dog","cat","care"], badge:"" },
@@ -892,7 +897,7 @@ const products = [
   { id:194, name:"Комплект шлейка+поводок для кошек, круглый шнур из PU-кожи, оливковый", art:"HD024015-03F", size:"шея 21–33 см, грудь 31–53 см, поводок 130 см · до 8 кг", price:90, emoji:"🐈", cat:["cat","ammo"], badge:"Подходит для собак миниатюрных пород" },
   { id:195, name:"Комплект шлейка+поводок для кошек, круглый шнур из PU-кожи, сиреневый", art:"HD024015-04F", size:"шея 21–33 см, грудь 31–53 см, поводок 130 см · до 8 кг", price:90, emoji:"🐈", cat:["cat","ammo"], badge:"Подходит для собак миниатюрных пород" },
   { id:39, name:"Интерактивная рыба",             art:"2027",  size:"28x12x5.5 см",      price:40,  emoji:"🐟", cat:["cat","toys"],               badge:"USB" },
-  { id:40, name:"Птичка на удочке (4 цвета)",    art:"2018",  size:"18x13.5x6.5 см",    price:13,  emoji:"🐦", cat:["cat","toys"],               badge:"" },
+  { id:40, name:"Птичка на удочке (4 цвета)",    art:"2018",  size:"18x13.5x6.5 см",    price:15,  emoji:"🐦", cat:["cat","toys"],               badge:"" },
   { id:42, name:"Удочка Осьминог (3 цвета)",     art:"2119",  size:"20x7x4 см",         price:15,  emoji:"🐙", cat:["cat","toys"],               badge:"Распродано. Ожидается поставка." },
   { id:41, name:"Удочка фейерверк",               art:"2841",  size:"135x3x1 см",        price:12,   emoji:"🎆", cat:["cat","toys"],               badge:"" },
   { id:38, name:"Игрушка Мышка Тако",            art:"2834",  size:"18x5x1.5 см",       price:4.5,   emoji:"🐭", cat:["cat","toys"],               badge:"" },
@@ -909,15 +914,15 @@ const products = [
   { id:46, name:"Игрушка-когтеточка",            art:"28510", size:"35x35x7.5 см",      price:45,  emoji:"🌿", cat:["cat","toys"],        badge:"Распродано. Ожидается поставка." },
   { id:48, name:"Диспенсер для лакомств",        art:"28198", size:"9x5.5 см",          price:9,  emoji:"🎁", cat:["cat","toys"],               badge:"" },
   { id:49, name:"Шар-диспенсер для лакомств",    art:"28206", size:"Ø 5.5 см",          price:6,   emoji:"⚽", cat:["cat","toys"],               badge:"" },
-  { id:53, name:"Когтеточка круг с шариками",    art:"28499", size:"Ø33.5x5.5 см",      price:22,  emoji:"⭕", cat:["cat","toys"],        badge:"" },
+  { id:53, name:"Когтеточка круг с шариками",    art:"28499", size:"Ø33.5x5.5 см",      price:25,  emoji:"⭕", cat:["cat","toys"],        badge:"" },
   { id:58, name:"Удочка с присоской",             art:"28385", size:"100 см",            price:20,  emoji:"🎯", cat:["cat","toys"],               badge:"Комплект" },
   { id:59, name:"Когтеточка 70*24см Гусь",      art:"28461", size:"70x24 см",          price:35,  emoji:"🦢", cat:["cat","toys"],        badge:"Распродано. Ожидается поставка." },
-  { id:200, name:"Дразнилка с игрушкой «Сонная лама»", art:"37410", size:"22 см", price:15, emoji:"🦙", cat:["cat","toys"], badge:"" },
+  { id:200, name:"Дразнилка с игрушкой «Сонная лама»", art:"37410", size:"22 см", price:17, emoji:"🦙", cat:["cat","toys"], badge:"" },
   { id:204, name:"Дразнилка с игрушкой «Океанская волна»", art:"37413", size:"20 см", price:15, emoji:"🐟", cat:["cat","toys"], badge:"" },
   { id:206, name:"Телескопическая дразнилка с перьями, зелёная", art:"2010", size:"18.5 см", price:21, emoji:"🪶", cat:["cat","toys"], badge:"" },
   { id:203, name:"Когтеточка «Новогодняя ёлка»", art:"90975", size:"", price:35, emoji:"🎄", cat:["cat","toys"], badge:"Новогодняя коллекция" },
   { id:218, name:"Новогодние игрушки для кошек «Какао и ёлочка»", art:"97271", size:"набор 2 шт.", price:10, emoji:"🎄", cat:["cat","toys"], badge:"Новогодняя коллекция" },
-  { id:202, name:"Набор игрушек для кошек «Птички», 2 шт.", art:"37401", size:"17 см", price:15, emoji:"🐦", cat:["cat","toys"], badge:"" },
+  { id:202, name:"Набор игрушек для кошек «Птички», 2 шт.", art:"37401", size:"17 см", price:17, emoji:"🐦", cat:["cat","toys"], badge:"" },
   { id:182, name:"Игрушка с кошачьей мятой «Рыба-меч», оранжевая", art:"HD015045-01F", size:"24x6 см", price:16, emoji:"🐟", cat:["cat","toys"], badge:"" },
   { id:183, name:"Игрушка с кошачьей мятой «Рыба-меч», зелёная", art:"HD015045-02F", size:"24x6 см", price:16, emoji:"🐟", cat:["cat","toys"], badge:"" },
   { id:184, name:"Игрушка с кошачьей мятой «Тигровая полосатая рыбка»", art:"HD015045-03F", size:"20x8 см", price:16, emoji:"🐟", cat:["cat","toys"], badge:"" },
